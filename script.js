@@ -410,10 +410,13 @@ class The_Time
 				{
 					if (!is_crops_checked)
 					{
-						is_crops_wilt = true;
-						if (!problems_array.includes("The crops wilted!"))
+						if (global_time.h >= 12)
 						{
-							problems_array.push("The crops wilted!");
+							is_crops_wilt = true;
+							if (!problems_array.includes("The crops wilted!"))
+							{
+								problems_array.push("The crops wilted!");
+							}
 						}
 					}
 				}
@@ -423,7 +426,7 @@ class The_Time
 		else //this.m < 60
 		{
 			let probability = Math.round(Math.random()*100);
-			if (probability > 80)
+			if (probability > 85)
 			{
 				let random_num = Math.round(Math.random()*3);
 				if (random_num == 0)
@@ -467,10 +470,13 @@ class The_Time
 				{
 					if (!is_crops_checked)
 					{
-						is_crops_wilt = true;
-						if (!problems_array.includes("The crops wilted!"))
+						if (global_time.h >= 12)
 						{
-							problems_array.push("The crops wilted!");
+							is_crops_wilt = true;
+							if (!problems_array.includes("The crops wilted!"))
+							{
+								problems_array.push("The crops wilted!");
+							}
 						}
 					}
 				}
@@ -1065,30 +1071,35 @@ function perform_action(action)
 	//extra actions
 	else if (action == "Ask Alex to fix communication system")
 	{
+		time_changed = 2;
 		action_message = "Alex is fixing the communication system!";
 		Alex.status = general_status.Fixing_Communication;
 	}
 
 	else if (action == "Ask Alex to fix broken shield")
 	{
+		time_changed = 2;
 		action_message = "Alex is fixing the broken shield!";
 		Alex.status = general_status.Fixing_Shield;
 	}
 
 	else if (action == "Ask Sam to prepare food")
 	{
+		time_changed = 2;
 		action_message = "Sam is preparing the food!";
 		Sam.status = general_status.Preparing_Food;
 	}
 
 	else if (action == "Ask Sam to take care of crops")
 	{
+		time_changed = 2;
 		action_message = "Sam is taking care of the crops";
 		Sam.status = general_status.Taking_Care_Crops;
 	}
 
 	else if (action == "Ask Tom to give consultant")
 	{
+		time_changed = 2;
 		action_message = "Tom is giving consultation!";
 		Tom.status = general_status.Giving_Consultation;
 		Alex.status = general_status.Receiving_Consultation;
@@ -1097,6 +1108,7 @@ function perform_action(action)
 
 	else if (action == "Ask Tom to give treatment")
 	{
+		time_changed = 2;
 		action_message = "Tom is giving treatment!";
 		Tom.status = general_status.Giving_Treatment;
 		Alex.status = general_status.Receiving_Treatment;
@@ -1107,23 +1119,23 @@ function perform_action(action)
 	//Tom status
 	if (Tom.status == general_status.Resting)
 	{
-		if (Alex.mental_health < 50)
+		if (Alex.mental_health < 80)
 		{
 			Alex.status = general_status.Receiving_Consultation;
 			Tom.status = general_status.Giving_Consultation;
 		}
-		else if (Alex.fitness < 50)
+		else if (Alex.fitness < 80)
 		{
 			Alex.status = general_status.Receiving_Treatment;
 			Tom.status = general_status.Giving_Treatment;
 		}
 		
-		else if (Sam.mental_health < 50)
+		else if (Sam.mental_health < 80)
 		{
 			Sam.status = general_status.Receiving_Consultation;
 			Tom.status = general_status.Giving_Consultation
 		}
-		else if (Sam.fitness < 50)
+		else if (Sam.fitness < 80)
 		{
 			Sam.status = general_status.Receiving_Treatment;
 			Tom.status = general_status.Giving_Treatment;
@@ -1144,15 +1156,19 @@ function perform_action(action)
 		if (Alex.status == general_status.Receiving_Treatment || Alex.status == general_status.Receiving_Consultation)
 		{
 			Alex.status = general_status.Resting;
-			Alex.mental_increase(time_changed*3);
-			Alex.fitness_increase(time_changed*3);
+			Tom.mental_increase(time_changed*10);
+			Tom.fitness_increase(time_changed*10);
+			Alex.mental_increase(time_changed*5);
+			Alex.fitness_increase(time_changed*5);
 		}
 		
 		if (Sam.status == general_status.Receiving_Treatment || Sam.status == general_status.Receiving_Consultation)
 		{
 			Sam.status = general_status.Resting;
-			Sam.mental_increase(time_changed*3);
-			Sam.fitness_increase(time_changed*3);
+			Tom.mental_increase(time_changed*5);
+			Tom.fitness_increase(time_changed*5);
+			Sam.mental_increase(time_changed*5);
+			Sam.fitness_increase(time_changed*5);
 		}
 	}
 	else if (Tom.status == general_status.Exercising)
@@ -1264,7 +1280,7 @@ function perform_action(action)
 	
 	//causing problems
 	let probability = Math.round(Math.random()*100);
-	if (probability > 80)
+	if (probability > 85)
 	{
 		let random_num = Math.round(Math.random()*3);
 		if (random_num == 0)
@@ -1308,10 +1324,13 @@ function perform_action(action)
 		{
 			if (!is_crops_checked)
 			{
-				is_crops_wilt = true;
-				if (!problems_array.includes("The crops wilted!"))
+				if (global_time.h >= 12)
 				{
-					problems_array.push("The crops wilted!");
+					is_crops_wilt = true;
+					if (!problems_array.includes("The crops wilted!"))
+					{
+						problems_array.push("The crops wilted!");
+					}
 				}
 			}
 		}
@@ -1444,20 +1463,20 @@ function add_actions()
 		actions_array.splice(actions_array.indexOf("Ask Sam to take care of crops"),1);
 	}
 	
-	if ((Sam.mentality < 50 || Alex.mentality < 50) && !actions_array.includes("Ask Tom to give consultant"))
+	if ((Sam.mentality < 80 || Alex.mentality < 80) && !actions_array.includes("Ask Tom to give consultant"))
 	{
 		actions_array.push("Ask Tom to give consultant");
 	}
-	else if (!(Sam.mentality < 50 || Alex.mentality < 50)  && actions_array.includes("Ask Tom to give consultant"))
+	else if (!(Sam.mentality < 80 || Alex.mentality < 80)  && actions_array.includes("Ask Tom to give consultant"))
 	{
 		actions_array.splice(actions_array.indexOf("Ask Tom to give consultant"),1);
 	}
 
-	if ((Sam.fitness < 50 || Alex.fitness < 50) && !actions_array.includes("Ask Tom to give treatment"))
+	if ((Sam.fitness < 80 || Alex.fitness < 80) && !actions_array.includes("Ask Tom to give treatment"))
 	{
 		actions_array.push("Ask Tom to give treatment");
 	}
-	else if (!(Sam.fitness < 50 || Alex.fitness < 50)  && actions_array.includes("Ask Tom to give treatment"))
+	else if (!(Sam.fitness < 80 || Alex.fitness < 80)  && actions_array.includes("Ask Tom to give treatment"))
 	{
 		actions_array.splice(actions_array.indexOf("Ask Tom to give treatment"),1);
 	}
