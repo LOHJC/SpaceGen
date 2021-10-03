@@ -1,0 +1,37 @@
+@font-face {
+  font-family: "Barlow-Bold";
+  src: URL("./2020_fonts/2020_fonts/Barlow/Barlow-Bold.ttf") format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: "Barlow-Bold";
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+	background-color: #AAAAAA;
+	user-select: none;
+	padding: 10px;
+	text-align: center;
+}
+
+footer {
+	background-color: #AAAAAA;
+	user-select: none;
+	padding: 10px;
+	text-align: center;
+}
+
+#game_canvas{
+	padding: 10px;
+	margin: auto;
+    display: block;
+}
